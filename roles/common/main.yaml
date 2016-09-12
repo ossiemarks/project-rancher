@@ -1,0 +1,24 @@
+---
+
+- hosts: all
+  become: yes
+  become_user: vagrant
+  tasks:
+  - name: ensure ssh
+    file: path=~/.ssh state=directory mode=0700
+  - name: copy local files to remote
+    copy: src=~/.ssh/id_rsa-bcpptl dest=~/.ssh/id_rsa mode=0600 remote_src=no
+  - name: ensure /opt/keys
+    file: path=/opt/keys state=directory mode=0755
+    become: yes
+    become_user: root
+    become_method: sudo
+  - name: copy local files to remote
+    copy: src=~/.ssh/id_rsa-bcpptl dest=/opt/keys/bpfcp-key mode=0644 remote_src=no
+    become: yes
+    become_user: root
+    become_method: sudo
+  - name: copy local files to remote
+    copy: src=~/.gitconfig dest=~/.gitconfig mode=0644 remote_src=no
+  - name: fetch server code
+    git: repo=git@github.com:ossiemarks/server-code.git dest=~/server-code accept_hostkey=yes version=master
