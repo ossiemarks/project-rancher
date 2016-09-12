@@ -1,0 +1,22 @@
+---
+
+origin_working_dir: /tmp
+rancher_version: lastest
+openshift_domain: webhop.me
+
+external_dns:
+ # following addresses for frankencluster, override with google for local dev
+  - 8.8.8.8
+  - 8.8.8.4
+
+http_proxy:
+https_proxy: "{{ http_proxy }}"
+#Used for cert generation to be used in router
+CA: /etc/pki/CA/
+signer_cert: "{{ CA }}/ca.crt"
+signer_key: "{{ CA }}/ca.key"
+signer_serial: "{{ CA }}/ca.serial.txt" 
+hostnames: "*.{{ openshift_domain}}"
+cert: "{{ CA }}/{{ openshift_domain}}.crt" 
+key: "{{ CA }}/{{ openshift_domain}}.key"
+pem: "{{ openshift_domain }}.router.pem"
